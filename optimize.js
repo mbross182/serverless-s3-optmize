@@ -7,6 +7,8 @@ const { basename, extname } = require("path");
 const S3 = new AWS.S3();
 
 module.exports.handle = async ({ Records: records }, context) => {
+
+  try {
     await Promise.all(
       records.map(async record => {
         const { key } = record.s3.object;
@@ -34,5 +36,9 @@ module.exports.handle = async ({ Records: records }, context) => {
       statusCode: 301,
       body: { ok: true }
     };
+
+  } catch (error) {
+    return error;
+  }
 
 };
